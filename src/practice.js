@@ -64,4 +64,26 @@ function getProductsWithImages() {
 
 getProductsWithImages();
 
+function mostPopularVideosForDays(days) {
+    knexInstance
+        .select('video_name', 'region')
+        .count('date_viewed AS views')
+        .where(
+            'date_viewed',
+            '>',
+            knexInstance.raw(`now() - '?? days' ::INTERVAL`, days)
+        )
+        .from('whopipe_ video_views')
+        .groupBy('video_name', 'region')
+        .orderBy([
+            { column: 'region', order: 'ASC' },
+            { column: 'views', order: 'DESC'}
+        ])
+        .then(result => {
+            console.log(result)
+        })
+}
+
+mostPopularVideosForDays(30);
+
 console.log(qry)
