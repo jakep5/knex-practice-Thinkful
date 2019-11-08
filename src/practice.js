@@ -8,7 +8,7 @@ const knexInstance = knex({
 
 console.log('knex and driver installed correctly');
 
-knexInstance.from('amazong_products').select('*')
+knexInstance.from('amazong_products').select('*') //is accessing the database here
     .then(result => {
         console.log(result)
     })
