@@ -52,4 +52,16 @@ function paginateProducts(page) {
 
 paginateProducts(2)
 
+function getProductsWithImages() {
+    knexInstance
+        .select('product_id', 'name', 'price', 'category', 'image')
+        .from('amazong_products')
+        .whereNotNull('image')
+        .then(result => {
+            console.log(result)
+        })
+}
+
+getProductsWithImages();
+
 console.log(qry)
