@@ -1,6 +1,7 @@
 const ArticlesService = require('../src/articles-service')
 const knex = require('knex')
 
+
 describe(`Articles service object`, function() {
     let db
     let testArticles = [
@@ -17,17 +18,27 @@ describe(`Articles service object`, function() {
             content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus, voluptate? Necessitatibus, reiciendis? Cupiditate totam laborum esse animi ratione ipsa dignissimos laboriosam eos similique cumque. Est nostrum esse porro id quaerat.'
        },
     ]
-
+  
     before(() => {
         db = knex({
             client: 'pg',
             connection: process.env.TEST_DB_URL,
         })
     })
+    before(() => {
+        return db
+            .into('blogful_articles')
+            .insert(testArticles)
+    })
+
+    after(() => db.destroy())
 })
 
 describe(`getAllArticles()`, () => {
-    /* it(`resolves all articles from 'blogful_articles' table` () => {
-
-    }) */
+    it(`resolves all articles from 'blogful_articles' table`, () => {
+        return ArticlesService.getAllArticles(db)
+            .then(actual => {
+                expect(actual).to.eql(testArticles)
+            })
+    })
 })
